@@ -2,3 +2,6 @@ Debug/
 Release/
 .dcu
 __history/
+*.dcu
+*.local
+*.identcache

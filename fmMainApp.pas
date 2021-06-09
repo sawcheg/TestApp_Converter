@@ -84,7 +84,7 @@ procedure TfmMainApp.FormCreate(Sender: TObject);
 var
   i: Integer;
 begin
-  GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, formatSettings);
+  formatSettings:= TFormatSettings.Create;
   converter := TConverter.Create;
   for i := 0 to converter.CountTypeUnits - 1 do
   begin
@@ -97,7 +97,7 @@ end;
 
 procedure TfmMainApp.OnlyNumericKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not (Key in [#8, '0'..'9', '-', formatSettings.DecimalSeparator]) then
+  if not CharInSet(Key, [#8, '0'..'9', '-', formatSettings.DecimalSeparator]) then
     Key := #0
   else if ((Key = formatSettings.DecimalSeparator) or (Key = '-')) and (Pos(Key, TEdit(Sender).Text) > 0) then
     Key := #0
@@ -113,7 +113,6 @@ end;
 
 procedure TfmMainApp.SetSelectedItem(const Value: Integer);
 var
-  i: Integer;
   item: IUnit;
 begin
   FSelectedItem := Value;

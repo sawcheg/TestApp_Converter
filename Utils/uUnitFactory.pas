@@ -27,8 +27,6 @@ implementation
 { TUnitLengthFactory }
 
 function TUnitLengthFactory.GetUnitItem(index: integer): IUnit;
-var
-  meter: TMeter;
 begin
   case index of
     0:

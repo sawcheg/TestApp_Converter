@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{08D9CD16-2C5F-4F13-B251-DA660D6AF6E8}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="TestAppConverter.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\TestAppConverterTests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="TestAppConverter">
+        <MSBuild Projects="TestAppConverter.dproj"/>
+    </Target>
+    <Target Name="TestAppConverter:Clean">
+        <MSBuild Projects="TestAppConverter.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestAppConverter:Make">
+        <MSBuild Projects="TestAppConverter.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestAppConverterTests">
+        <MSBuild Projects="Test\TestAppConverterTests.dproj"/>
+    </Target>
+    <Target Name="TestAppConverterTests:Clean">
+        <MSBuild Projects="Test\TestAppConverterTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestAppConverterTests:Make">
+        <MSBuild Projects="Test\TestAppConverterTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="TestAppConverter;TestAppConverterTests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="TestAppConverter:Clean;TestAppConverterTests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="TestAppConverter:Make;TestAppConverterTests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

@@ -8,7 +8,6 @@ uses
 type
   TConverter = class(TObject)
   private
-    FCountTypeUnits: Integer;
     function GetCountTypeUnits: Integer;
   public
     // count of available unit types
