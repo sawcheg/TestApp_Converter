@@ -10,7 +10,6 @@ type
     function GetQuantity: TQuantity; override;
   end;
   // согласно таблице СИ метр является эталоном
-
   TMeter = class(TUnitLength)
   public
     class function Name: string; override;

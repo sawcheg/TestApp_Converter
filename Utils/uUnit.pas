@@ -2,10 +2,13 @@ unit uUnit;
 
 interface
 
+const
+  QuantityNames: array[0..2] of string = ('Масса', 'Длина', 'Время');
+
 type
   TQuantity = (qWeight, qLength, qTime);
 
-  // Определение интерфейса
+  // Defining an interface
   IUnit = interface(IInterface)
     function GetQuantity: TQuantity;
     function GetRatio: double;
@@ -26,7 +29,6 @@ type
 implementation
 
 { TUnit }
-
 function TUnit.GetName: string;
 begin
   Result := Name;

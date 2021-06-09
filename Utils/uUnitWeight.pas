@@ -10,7 +10,6 @@ type
     function GetQuantity: TQuantity; override;
   end;
   // согласно таблице СИ килограмм является эталоном
-
   TKilogram = class(TUnitWeight)
   public
     class function Name: string; override;

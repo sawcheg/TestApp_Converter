@@ -10,7 +10,6 @@ type
     function GetQuantity: TQuantity; override;
   end;
   // согласно таблице СИ секунда является эталоном
-
   TSecond = class(TUnitTime)
   public
     class function Name: string; override;

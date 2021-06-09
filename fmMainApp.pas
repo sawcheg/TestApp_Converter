@@ -3,33 +3,144 @@ unit fmMainApp;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uConverter, Vcl.StdCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uConverter,
+  Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask, System.Generics.Collections, uUnit;
 
 type
-  TForm1 = class(TForm)
-    btn1: TButton;
-    procedure btn1Click(Sender: TObject);
+  TfmMainApp = class(TForm)
+    rgTypeUnit: TRadioGroup;
+    edFrom: TMaskEdit;
+    edTo: TMaskEdit;
+    cbbFrom: TComboBox;
+    cbbTo: TComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure OnlyNumericKeyPress(Sender: TObject; var Key: Char);
+    procedure rgTypeUnitClick(Sender: TObject);
+    procedure editChange(Sender: TObject);
+    procedure cbbChange(Sender: TObject);
   private
+    converter: TConverter;
+    formatSettings: TFormatSettings;
+    arr_units: TList<IUnit>;
+    FSelectedItem: Integer;
+    procedure SetSelectedItem(const Value: Integer);
+    property SelectedItem: Integer read FSelectedItem write SetSelectedItem;
     { Private declarations }
   public
     { Public declarations }
   end;
 
 var
-  Form1: TForm1;
+  fmMain: TfmMainApp;
+
 
 implementation
 
 {$R *.dfm}
 
-procedure TForm1.btn1Click(Sender: TObject);
-var
- c: TConverter;
+procedure TfmMainApp.cbbChange(Sender: TObject);
 begin
-  c := TConverter.Create;
-  ShowMessage(c.ShowItem);
+  if Sender.Equals(cbbFrom) then
+    editChange(edFrom)
+  else
+    editChange(edTo);
+end;
 
+procedure TfmMainApp.editChange(Sender: TObject);
+var
+  vEditTo: Tmaskedit;
+  val: Double;
+  unitFrom, unitTo: Integer;
+begin
+  if Sender.Equals(edFrom) then
+  begin
+    vEditTo := edTo;
+    unitFrom := cbbFrom.ItemIndex;
+    unitTo := cbbTo.ItemIndex;
+  end
+  else
+  begin
+    vEditTo := edFrom;
+    unitFrom := cbbTo.ItemIndex;
+    unitTo := cbbFrom.ItemIndex;
+  end;
+
+  try
+    if Tmaskedit(Sender).Text = '' then
+      val := 0
+    else
+      val := StrToFloat(Tmaskedit(Sender).Text);
+  except
+    raise Exception.Create('Ошибка! Невозможно преобразовать введенное значение в формат числа с плавающей запятой!');
+  end;
+
+  val := converter.ConvertUnitValue(arr_units[unitFrom], arr_units[unitTo], val);
+  vEditTo.Text := val.ToString;
+end;
+
+procedure TfmMainApp.FormCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+  GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, formatSettings);
+  converter := TConverter.Create;
+  for i := 0 to converter.CountTypeUnits - 1 do
+  begin
+    rgTypeUnit.Columns := rgTypeUnit.Columns + 1;
+    rgTypeUnit.Items.Add(converter.GetTypeUnitName(i));
+  end;
+  if rgTypeUnit.Items.Count > 0 then
+    SelectedItem := 0;
+end;
+
+procedure TfmMainApp.OnlyNumericKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (Key in [#8, '0'..'9', '-', formatSettings.DecimalSeparator]) then
+    Key := #0
+  else if ((Key = formatSettings.DecimalSeparator) or (Key = '-')) and (Pos(Key, TEdit(Sender).Text) > 0) then
+    Key := #0
+  else if (Key = '-') and (TEdit(Sender).SelStart <> 0) then
+    Key := #0;
+end;
+
+procedure TfmMainApp.rgTypeUnitClick(Sender: TObject);
+begin
+  if rgTypeUnit.ItemIndex <> SelectedItem then
+    SelectedItem := rgTypeUnit.ItemIndex;
+end;
+
+procedure TfmMainApp.SetSelectedItem(const Value: Integer);
+var
+  i: Integer;
+  item: IUnit;
+begin
+  FSelectedItem := Value;
+  if rgTypeUnit.ItemIndex <> Value then
+    rgTypeUnit.ItemIndex := Value;
+  cbbTo.Clear;
+  cbbFrom.Clear;
+  arr_units := converter.GetUnitsForType(Value);
+  for item in arr_units do
+  begin
+    cbbFrom.Items.Add(item.Name);
+    cbbTo.Items.Add(item.Name);
+  end;
+  if cbbFrom.Items.Count > 0 then
+  begin
+    cbbFrom.ItemIndex := 0;
+    cbbTo.ItemIndex := cbbTo.Items.Count - 1;
+    editChange(edFrom);
+  end;
+end;
+
+procedure TfmMainApp.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  arr_units.Clear;
+  FreeAndNil(arr_units);
+  FreeAndNil(converter);
 end;
 
 end.
+
