@@ -14,12 +14,14 @@ type
     edTo: TMaskEdit;
     cbbFrom: TComboBox;
     cbbTo: TComboBox;
+    btnClear: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure OnlyNumericKeyPress(Sender: TObject; var Key: Char);
     procedure rgTypeUnitClick(Sender: TObject);
     procedure editChange(Sender: TObject);
     procedure cbbChange(Sender: TObject);
+    procedure btnClearClick(Sender: TObject);
   private
     converter: TConverter;
     formatSettings: TFormatSettings;
@@ -39,6 +41,12 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfmMainApp.btnClearClick(Sender: TObject);
+begin
+  edFrom.Text:= '1';
+  editChange(edFrom);
+end;
 
 procedure TfmMainApp.cbbChange(Sender: TObject);
 begin
@@ -76,8 +84,13 @@ begin
     raise Exception.Create('Ошибка! Невозможно преобразовать введенное значение в формат числа с плавающей запятой!');
   end;
 
-  val := converter.ConvertUnitValue(arr_units[unitFrom], arr_units[unitTo], val);
-  vEditTo.Text := val.ToString;
+  try
+    val := converter.ConvertUnitValue(arr_units[unitFrom], arr_units[unitTo], val);
+    vEditTo.Text := val.ToString;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка при конвертации: ' + E.Message);
+  end;
 end;
 
 procedure TfmMainApp.FormCreate(Sender: TObject);
@@ -116,21 +129,26 @@ var
   item: IUnit;
 begin
   FSelectedItem := Value;
-  if rgTypeUnit.ItemIndex <> Value then
-    rgTypeUnit.ItemIndex := Value;
-  cbbTo.Clear;
-  cbbFrom.Clear;
-  arr_units := converter.GetUnitsForType(Value);
-  for item in arr_units do
-  begin
-    cbbFrom.Items.Add(item.Name);
-    cbbTo.Items.Add(item.Name);
-  end;
-  if cbbFrom.Items.Count > 0 then
-  begin
-    cbbFrom.ItemIndex := 0;
-    cbbTo.ItemIndex := cbbTo.Items.Count - 1;
-    editChange(edFrom);
+  try
+    if rgTypeUnit.ItemIndex <> Value then
+      rgTypeUnit.ItemIndex := Value;
+    cbbTo.Clear;
+    cbbFrom.Clear;
+    arr_units := converter.GetUnitsForType(Value);
+    for item in arr_units do
+    begin
+      cbbFrom.Items.Add(item.Name);
+      cbbTo.Items.Add(item.Name);
+    end;
+    if cbbFrom.Items.Count > 0 then
+    begin
+      cbbFrom.ItemIndex := 0;
+      cbbTo.ItemIndex := cbbTo.Items.Count - 1;
+      editChange(edFrom);
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка при загрузке данных по типу единиц измерения: ' + E.Message);
   end;
 end;
 

@@ -65,4 +65,13 @@ object fmMainApp: TfmMainApp
     TabOrder = 4
     OnChange = cbbChange
   end
+  object btnClear: TButton
+    Left = 472
+    Top = 69
+    Width = 121
+    Height = 25
+    Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+    TabOrder = 5
+    OnClick = btnClearClick
+  end
 end
