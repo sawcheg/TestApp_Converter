@@ -16,14 +16,14 @@ program TestAppConverterTests;
 
 uses
   DUnitTestRunner,
-  TestuConverter in 'TestuConverter.pas',
-  uConverter in '..\Utils\uConverter.pas',
-  uUnit in '..\Utils\uUnit.pas',
-  uUnitFactory in '..\Utils\uUnitFactory.pas',
-  uUnitLength in '..\Utils\uUnitLength.pas',
-  uUnitTime in '..\Utils\uUnitTime.pas',
-  uUnitWeight in '..\Utils\uUnitWeight.pas',
-  TestuUnitTime in 'TestuUnitTime.pas';
+  TestConverterUnit in 'TestConverterUnit.pas',
+  ConverterUnit in '..\Utils\ConverterUnit.pas',
+  UnitOfMeasure in '..\Utils\UnitOfMeasure.pas',
+  FactoryUnitOfMeasure in '..\Utils\FactoryUnitOfMeasure.pas',
+  UnitOfMeasureLength in '..\Utils\UnitOfMeasureLength.pas',
+  UnitOfMeasureTime in '..\Utils\UnitOfMeasureTime.pas',
+  UnitOfMeasureWeight in '..\Utils\UnitOfMeasureWeight.pas',
+  TestUnitTime in 'TestUnitTime.pas';
 
 {$R *.RES}
 
