@@ -6,7 +6,7 @@
 {                                                       }
 {*******************************************************}
 
-unit TestuUnitTime;
+unit TestUnitTime;
 {
 
   Delphi DUnit Test Case

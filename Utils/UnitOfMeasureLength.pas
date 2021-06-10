@@ -1,27 +1,36 @@
-unit uUnitLength;
+{*******************************************************}
+{                                                       }
+{       Interface and class for the unit of measure     }
+{       of the converter (type Length)                  }
+{       Copyright (c) 2021 AlexSolovey                  }
+{                                                       }
+{*******************************************************}
+
+unit UnitOfMeasureLength;
 
 interface
 
 uses
-  uUnit;
+  UnitOfMeasure;
 
 type
-  TUnitLength = class(TUnit)
+  TUnitOfMeasureLength = class(TUnitOfMeasure)
     function GetQuantity: TQuantity; override;
   end;
-  // согласно таблице СИ метр является эталоном
-  TMeter = class(TUnitLength)
+  // according to the SI table, the meter is a standard
+
+  TMeter = class(TUnitOfMeasureLength)
   public
     class function Name: string; override;
   end;
 
-  TKilometer = class(TUnitLength)
+  TKilometer = class(TUnitOfMeasureLength)
     function GetRatio: Double; override;
   public
     class function Name: string; override;
   end;
 
-  TInch = class(TUnitLength)
+  TInch = class(TUnitOfMeasureLength)
     function GetRatio: Double; override;
   public
     class function Name: string; override;
@@ -29,9 +38,9 @@ type
 
 implementation
 
-{ TUnitLength }
+{ TUnitOfMeasureLength }
 
-function TUnitLength.GetQuantity: TQuantity;
+function TUnitOfMeasureLength.GetQuantity: TQuantity;
 begin
   Result := TQuantity.qLength;
 end;
@@ -54,7 +63,6 @@ class function TKilometer.Name: string;
 begin
   Result := 'километр';
 end;
-
 
 { TInch }
 function TInch.GetRatio: Double;

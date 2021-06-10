@@ -1,27 +1,36 @@
-unit uUnitTime;
+{*******************************************************}
+{                                                       }
+{       Interface and class for the unit of measure     }
+{       of the converter (type Time)                    }
+{       Copyright (c) 2021 AlexSolovey                  }
+{                                                       }
+{*******************************************************}
+
+unit UnitOfMeasureTime;
 
 interface
 
 uses
-  uUnit;
+  UnitOfMeasure;
 
 type
-  TUnitTime = class(TUnit)
+  TUnitOfMeasureTime = class(TUnitOfMeasure)
     function GetQuantity: TQuantity; override;
   end;
-  // согласно таблице СИ секунда является эталоном
-  TSecond = class(TUnitTime)
+  // according to the SI table, the second is the standard
+
+  TSecond = class(TUnitOfMeasureTime)
   public
     class function Name: string; override;
   end;
 
-  THour = class(TUnitTime)
+  THour = class(TUnitOfMeasureTime)
     function GetRatio: Double; override;
   public
     class function Name: string; override;
   end;
 
-  TDay = class(TUnitTime)
+  TDay = class(TUnitOfMeasureTime)
     function GetRatio: Double; override;
   public
     class function Name: string; override;
@@ -29,9 +38,9 @@ type
 
 implementation
 
-{ TUnitTime }
+{ TUnitOfMeasureTime }
 
-function TUnitTime.GetQuantity: TQuantity;
+function TUnitOfMeasureTime.GetQuantity: TQuantity;
 begin
   Result := TQuantity.qTime;
 end;

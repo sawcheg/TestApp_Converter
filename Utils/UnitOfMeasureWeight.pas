@@ -1,27 +1,36 @@
-unit uUnitWeight;
+{*******************************************************}
+{                                                       }
+{ Interface and class for the unit of measure           }
+{ of the converter (type Weight)                        }
+{       Copyright (c) 2021 AlexSolovey                  }
+{                                                       }
+{*******************************************************}
+
+unit UnitOfMeasureWeight;
 
 interface
 
 uses
-  uUnit;
+  UnitOfMeasure;
 
 type
-  TUnitWeight = class(TUnit)
+  TUnitOfMeasureWeight = class(TUnitOfMeasure)
     function GetQuantity: TQuantity; override;
   end;
-  // согласно таблице СИ килограмм является эталоном
-  TKilogram = class(TUnitWeight)
+  // according to the SI table, the kilogram is the standard
+
+  TKilogram = class(TUnitOfMeasureWeight)
   public
     class function Name: string; override;
   end;
 
-  TPound = class(TUnitWeight)
+  TPound = class(TUnitOfMeasureWeight)
     function GetRatio: Double; override;
   public
     class function Name: string; override;
   end;
 
-  TTon = class(TUnitWeight)
+  TTon = class(TUnitOfMeasureWeight)
     function GetRatio: Double; override;
   public
     class function Name: string; override;
@@ -31,7 +40,7 @@ implementation
 
 { TUnitWeight }
 
-function TUnitWeight.GetQuantity: TQuantity;
+function TUnitOfMeasureWeight.GetQuantity: TQuantity;
 begin
   Result := TQuantity.qWeight;
 end;

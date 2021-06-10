@@ -1,4 +1,12 @@
-unit uUnit;
+{*******************************************************}
+{                                                       }
+{       Interface and class for the unit of measure     }
+{       of the converter                                }
+{       Copyright (c) 2021 AlexSolovey                  }
+{                                                       }
+{*******************************************************}
+
+unit UnitOfMeasure;
 
 interface
 
@@ -9,7 +17,7 @@ type
   TQuantity = (qWeight, qLength, qTime);
 
   // Defining an interface
-  IUnit = interface(IInterface)
+  IUnitOfMeasure = interface(IInterface)
     function GetQuantity: TQuantity;
     function GetRatio: double;
     function GetName: string;
@@ -18,7 +26,7 @@ type
     property Name: string read GetName;
   end;
 
-  TUnit = class(TInterfacedObject, IUnit)
+  TUnitOfMeasure = class(TInterfacedObject, IUnitOfMeasure)
     function GetQuantity: TQuantity; virtual; abstract;
     function GetRatio: Double; virtual;
     function GetName: string;
@@ -28,13 +36,13 @@ type
 
 implementation
 
-{ TUnit }
-function TUnit.GetName: string;
+{ TUnitOfMeasure }
+function TUnitOfMeasure.GetName: string;
 begin
   Result := Name;
 end;
 
-function TUnit.GetRatio: Double;
+function TUnitOfMeasure.GetRatio: Double;
 begin
   Result := 1;
 end;
