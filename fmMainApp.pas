@@ -74,7 +74,8 @@ begin
     unitFrom := cbbTo.ItemIndex;
     unitTo := cbbFrom.ItemIndex;
   end;
-
+  //для исключения цикличности
+  vEditTo.OnChange := nil;
   try
     if Tmaskedit(Sender).Text = '' then
       val := 0
@@ -91,6 +92,7 @@ begin
     on E: Exception do
       ShowMessage('Ошибка при конвертации: ' + E.Message);
   end;
+  vEditTo.OnChange := editChange;
 end;
 
 procedure TfmMainApp.FormCreate(Sender: TObject);
