@@ -93,11 +93,16 @@ begin
   end;
 
   try
-    Value := FConverter.ConvertUnitValue(FArrayOFUnits[IndexFrom], FArrayOFUnits[IndexTo], Value);
-    MaskEditTo.Text := Value.ToString;
-  except
-    on E: Exception do
-      ShowMessage('Ошибка при конвертации: ' + E.Message);
+    try
+      MaskEditTo.OnChange := nil;
+      Value := FConverter.ConvertUnitValue(FArrayOFUnits[IndexFrom], FArrayOFUnits[IndexTo], Value);
+      MaskEditTo.Text := Value.ToString;
+    except
+      on E: Exception do
+        ShowMessage('Ошибка при конвертации: ' + E.Message);
+    end;
+  finally
+    MaskEditTo.OnChange := editChange;
   end;
 end;
 
